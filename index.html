@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K2 Network | GB & Item Market</title>
+<style>
+:root{--bg:#08090d;--panel:#12141b;--gold:#f3c969;--text:#f6f3ea;--muted:#a9adba;--line:#2a2d38}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#20202a 0,#08090d 60%);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding:24px}
+.wrap{width:min(100%,960px);margin:0 auto}.hero{text-align:center;padding:28px 0 22px}.badge{display:inline-block;border:1px solid #4b4737;color:var(--gold);border-radius:999px;padding:7px 13px;font-size:12px;letter-spacing:2px;font-weight:bold}
+h1{font-size:clamp(30px,6vw,46px);margin:18px 0 8px}h1 span{color:var(--gold)}.sub{color:var(--muted);margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:18px}.card{background:rgba(18,20,27,.96);border:1px solid #39333a;border-radius:20px;padding:24px;box-shadow:0 18px 60px #0006}
+.tag{font-size:12px;letter-spacing:1.5px;color:var(--gold);font-weight:bold}.name{font-size:23px;font-weight:800;margin:12px 0 6px}.desc{font-size:14px;color:var(--muted);min-height:22px}.price{font-size:clamp(34px,7vw,44px);font-weight:800;color:var(--gold);margin:18px 0 4px}.unit{font-size:13px;color:var(--muted)}
+.buy{display:block;text-align:center;text-decoration:none;background:linear-gradient(135deg,#f6d982,#c99536);color:#17120a;font-weight:800;padding:14px 16px;border-radius:11px;margin-top:20px}
+.note{text-align:center;font-size:12px;line-height:1.6;color:var(--muted);margin:24px auto 0;max-width:680px}footer{text-align:center;margin:28px 0 8px;color:#676b77;font-size:11px;letter-spacing:1px}
+</style></head><body><main class="wrap">
+<header class="hero"><div class="badge">PLAYER MARKET</div><h1>K2 NETWORK <span>MARKET</span></h1><p class="sub">GB ve oyun içi item satışları</p></header>
+<section class="grid" id="list">
+<article class="card"><div class="tag">GB SATIŞI</div><div class="name">K2 Network - Beramus</div><div class="desc">1 GB</div><div class="price" id="gbprice">7,50 TL</div><div class="unit">1 GB başına</div><a class="buy" id="gbbuy" href="#" target="_blank" rel="noopener">SATIN AL • DISCORD</a></article>
+<article class="card"><div class="tag">ITEM SATIŞI</div><div class="name">LPP +23 reb raum</div><div class="desc">Oyun içi item</div><div class="price">8.000 TL</div><div class="unit">Tek fiyat</div><a class="buy" id="itembuy" href="#" target="_blank" rel="noopener">SATIN AL • DISCORD</a></article>
+</section>
+<p class="note">Fiyatlar örnektir. GB fiyatı Google Sheets üzerinden güncellenebilir. Item eklemek veya fiyatını değiştirmek için kurulum rehberini izle.</p>
+<footer>UNOFFICIAL PLAYER MARKET • K2 NETWORK</footer>
+</main>
+<script>
+/*
+SETUP:
+SHEET_CSV_URL: public/published CSV URL of Google Sheets, first cell contains GB price (e.g. 7.50)
+DISCORD_URL: your Discord profile URL or invite link.
+*/
+const SHEET_CSV_URL="PASTE_PUBLISHED_GOOGLE_SHEETS_CSV_URL_HERE";
+const DISCORD_URL="PASTE_DISCORD_PROFILE_OR_INVITE_LINK_HERE";
+document.getElementById("gbbuy").href=DISCORD_URL;
+document.getElementById("itembuy").href=DISCORD_URL;
+function parsePrice(csv){const first=(csv.trim().split(/\r?\n/)[0]||"").split(",")[0].replace(/"/g,"").trim().replace(",",".");const n=Number(first);return Number.isFinite(n)&&n>0?n:null}
+async function updatePrice(){if(SHEET_CSV_URL.startsWith("PASTE_"))return;try{const r=await fetch(SHEET_CSV_URL+"&t="+Date.now(),{cache:"no-store"});if(!r.ok)throw 0;const p=parsePrice(await r.text());if(p!==null)document.getElementById("gbprice").textContent=p.toLocaleString("tr-TR",{minimumFractionDigits:2,maximumFractionDigits:2})+" TL"}catch(e){}}
+updatePrice();setInterval(updatePrice,30000);
+</script></body></html>
